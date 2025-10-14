@@ -547,30 +547,41 @@
         });
 
         // Formulário de contato com modal
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const formData = new FormData(this);
+            const nome = document.getElementById('nome').value;
+            const submitBtn = this.querySelector('button[type="submit"]');
             
-            // Enviar para Formspree
-            fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            }).then(response => {
+            // Desabilitar botão durante envio
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Enviando...';
+            
+            try {
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    body: new FormData(this),
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
                 if (response.ok) {
                     // Mostrar modal de sucesso
                     document.getElementById('successModal').style.display = 'block';
                     // Limpar formulário
                     this.reset();
                 } else {
-                    alert('Ops! Houve um erro ao enviar sua mensagem. Por favor, tente novamente.');
+                    throw new Error('Erro no envio');
                 }
-            }).catch(error => {
-                alert('Ops! Houve um erro ao enviar sua mensagem. Por favor, tente novamente.');
-            });
+            } catch (error) {
+                // Se der erro, usar o método tradicional (recarrega a página)
+                this.submit();
+            } finally {
+                // Reabilitar botão
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Enviar Mensagem';
+            }
         });
 
         // Fechar modal
