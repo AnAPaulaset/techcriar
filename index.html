@@ -488,11 +488,10 @@
             </div>
         </div>
     </section>
-
-    <!-- Contato -->
+   <!-- Contato -->
     <section id="contato" class="contato">
         <h2>Entre em Contato</h2>
-        <form id="contactForm" action="https://formspree.io/f/xkgqkgzz" method="POST">
+        <form action="https://formspree.io/f/xkgqkgzz" method="POST">
             <div class="form-group">
                 <label for="nome">Nome Completo</label>
                 <input type="text" id="nome" name="nome" required>
@@ -509,21 +508,10 @@
                 <label for="mensagem">Mensagem</label>
                 <textarea id="mensagem" name="mensagem" required></textarea>
             </div>
+            <input type="hidden" name="_subject" value="Novo contato do site TECHCRIAR">
             <button type="submit">Enviar Mensagem</button>
         </form>
     </section>
-
-    <!-- Modal de Sucesso -->
-    <div id="successModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-icon">✅</div>
-            <h3>Mensagem Enviada!</h3>
-            <p>Obrigado por entrar em contato! Recebemos sua mensagem e retornaremos em breve.</p>
-            <p>📧 Você receberá nossa resposta no email informado.</p>
-            <button class="modal-btn" onclick="closeModal()">Fechar</button>
-        </div>
-    </div>
-
     <!-- Footer -->
     <footer>
         <p>&copy; 2025 TECHCRIAR - Todos os direitos reservados</p>
@@ -545,56 +533,6 @@
                 }
             });
         });
-        // Formulário de contato com modal
-        document.getElementById('contactForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const nome = document.getElementById('nome').value;
-            const submitBtn = this.querySelector('button[type="submit"]');
-            
-            // Desabilitar botão durante envio
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Enviando...';
-            
-            try {
-                const response = await fetch(this.action, {
-                    method: 'POST',
-                    body: new FormData(this),
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-                
-                if (response.ok) {
-                    // Mostrar modal de sucesso
-                    document.getElementById('successModal').style.display = 'block';
-                    // Limpar formulário
-                    this.reset();
-                } else {
-                    throw new Error('Erro no envio');
-                }
-            } catch (error) {
-                // Se der erro, usar o método tradicional (recarrega a página)
-                this.submit();
-            } finally {
-                // Reabilitar botão
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Enviar Mensagem';
-            }
-        });
-        // Fechar modal
-        function closeModal() {
-            document.getElementById('successModal').style.display = 'none';
-        }
-
-        // Fechar modal clicando fora
-        window.onclick = function(event) {
-            const modal = document.getElementById('successModal');
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        }
-
         // Animação ao scroll
         const observerOptions = {
             threshold: 0.1
